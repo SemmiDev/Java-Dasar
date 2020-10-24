@@ -52,6 +52,7 @@ public class Main {
         String status;
         if (uangIbu < totalPembelian) {
             status = "UANG IBU TIDAK CUKUP";
+            System.exit(0);
         }else {
             status = "UANG IBU CUKUP";
         }
