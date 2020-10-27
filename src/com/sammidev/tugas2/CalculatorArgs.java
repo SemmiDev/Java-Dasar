@@ -1,4 +1,4 @@
-package com.sammidev;
+package com.sammidev.tugas2;
 
 import java.util.*;
 
