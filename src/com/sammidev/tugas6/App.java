@@ -5,11 +5,21 @@ import java.util.Scanner;
 public class App {
     public static void main(String[] args) {
         soal1();
-        soal2();
+//        soal2();
+//        soal3();
     }
 
-
     static void soal1() {
+        char ch = '\u0031' + '\u0035';
+        System.out.println(ch); // huruf f
+
+        int n = 0;
+        System.out.println(++n); // 1
+        System.out.println(n++); // 1
+        System.out.println(n++); // 2
+    }
+
+    static void soal2() {
         Scanner scanner = new Scanner(System.in);
         String teks1,teks2;
         System.out.print("Masukkan teks 1 : ");
@@ -31,7 +41,7 @@ public class App {
         System.out.println(status);
     }
 
-    static void soal2() {
+    static void soal3() {
 
         String nilai;
         Scanner scanner = new Scanner(System.in);
