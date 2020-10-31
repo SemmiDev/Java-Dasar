@@ -4,59 +4,151 @@ import java.util.*;
 
 public class App {
     public static void main(String[] args) {
-        System.out.println("------------- WELCOME ------------- ");
-        daftar();
+        new SignUp().signUp();
     }
 
-    static void daftar() {
-        String username, password, confirm;
-        Scanner scanner = new Scanner(System.in);
-        String acc[] = who();
-        System.out.print("confirm password : ");
-        confirm = scanner.nextLine();
+}
 
-        List<SignUp> list = new ArrayList<>();
-        if (confirm.equalsIgnoreCase(acc[1])) {
-            SignUp signUp = new SignUp(acc[0], acc[1], confirm);
-            list.add(signUp);
-        } else {
-            new Tetteeet("salah");
+class SignUp {
+    private String username;
+    private String password;
+    private String confirmPassword;
+    static List<String> accounts = new ArrayList<>();
+
+    void signUp() {
+        Helper helper = new Helper();
+        helper.clearScreen();
+        System.out.println("----------PLEASE SIGN UP----------");
+
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("Masukkan username : ");
+        this.username = scanner.nextLine();
+
+        System.out.print("Masukkan password : ");
+        this.password = scanner.nextLine();
+
+        System.out.print("Masukkan confirm password : ");
+        this.confirmPassword = scanner.nextLine();
+
+        String validationCheck = new Validator()
+                .validate(
+                        this.username,
+                        this.password,
+                        this.confirmPassword
+        );
+
+        if (!(validationCheck.equalsIgnoreCase(STATUS.VALIDATED.name()))) {
+            System.out.println(STATUS.SIGN_UP_FAILED.name());
+            helper.clearScreen();
+            signUp();
         }
 
-        String det[] = who();
-        list.forEach(a -> {
-            if (a.getUsername().equalsIgnoreCase(det[0]) && a.getPassword().equalsIgnoreCase(det[1])) {
-                System.out.println("\n\n");
-                System.out.println("WELCOME " + det[0]);
-                start();
-            } else {
-                System.err.println("upsss wrong credential");
-                System.exit(404);
-            }
-        });
+        String fushion = this.username + "," + this.password;
+        accounts.add(fushion);
+        System.out.println("---" + STATUS.SIGN_UP_SUCCESFULLY.name() +"---");
+        new Login().signIn();
     }
 
-    static String[] who() {
-        String username,password,confirm;
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getConfirmPassword() {
+        return confirmPassword;
+    }
+
+    public void setConfirmPassword(String confirmPassword) {
+        this.confirmPassword = confirmPassword;
+    }
+
+    @Override
+    public String toString() {
+        return "SignUp{" +
+                "username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", confirmPassword='" + confirmPassword + '\'' +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SignUp signUp = (SignUp) o;
+        return Objects.equals(username, signUp.username) &&
+                Objects.equals(password, signUp.password) &&
+                Objects.equals(confirmPassword, signUp.confirmPassword);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(username, password, confirmPassword);
+    }
+}
+
+class Login {
+    private String username;
+    private String password;
+
+    boolean signIn() {
+        Helper cls = new Helper();
+        cls.clearScreen();
+
+        System.out.println("----------PLEASE SIGN IN----------");
         Scanner scanner = new Scanner(System.in);
         System.out.print("Masukkan username : ");
-        username = scanner.nextLine();
-        System.out.print("Masukkan password : ");
-        password = scanner.nextLine();
+        this.username = scanner.nextLine();
 
-        return new String[]{username,password};
+        System.out.print("Masukkan password : ");
+        this.password = scanner.nextLine();
+
+        this.username = username.trim();
+        this.username = username.replaceAll("\\s+","");
+        this.password = password.trim();
+        this.password = password.replaceAll("\\s+","");
+        String data = this.username + "," + this.password;
+        SignUp.accounts.forEach(credential -> {
+            if (data.equalsIgnoreCase(credential)) {
+                System.out.println(STATUS.LOGIN_SUCCESSFULLY.name());
+                new Start().start();
+            }else {
+                System.err.println(STATUS.ACCOUNT_NOTFOUND.name());
+                signIn();
+            }
+        });
+
+        return true;
     }
+}
+
+class Start {
 
     static void start() {
-        System.out.println("\n");
+        Helper helper = new Helper();
+        helper.clearScreen();
         int pilihan;
+
         Scanner scanner = new Scanner(System.in);
-        System.out.println("----------------------------------------------");
-        System.out.println("1. ARITMATIKA");
-        System.out.println("2. VARIABLE");
-        System.out.println("3. KONVERSI (JAM,MENIT,DETIK) KE KE DETIK");
-        System.out.println("4. KECEPATAN,JARAK,DAN WAKTU");
-        System.out.println("----------------------------------------------");
+        System.out.println("-----------------------------------------------------");
+        System.out.println("1. OPERASI ARITMATIKA");
+        System.out.println("2. PENGISIAN VARIABLE");
+        System.out.println("3. KONVERSI SATUAN (JAM,MENIT,DETIK) KE SATUAN DETIK");
+        System.out.println("4. KALKULASI KECEPATAN, JARAK, DAN WAKTU");
+        System.out.println("5. EXIT");
+        System.out.println("-----------------------------------------------------");
 
         System.out.print("Masukkan nomor pilihan anda : ");
         pilihan = scanner.nextInt();
@@ -64,11 +156,12 @@ public class App {
 
         while (isNext) {
             switch (pilihan) {
-                case 1: aritmatika();
-                case 2: tabel();
-                case 3: convert();
-                case 4: svt();
-                default: new CommandNotFound("YANG ANDA MASUKKAN SALAH").showError();
+                case 1: new ArithmeticOperation().start();
+                case 2: new Variable().start();
+                case 3: new ConverterToSecond().start();
+                case 4: new CalculationOfSpeedDistanceAndTime().start();
+                case 5: End.end();
+                default: new CommandNotFound("YANG ANDA MASUKKAN SALAH").commandNotFoundPilihan();
             }
 
             boolean isNext2 = next();
@@ -83,6 +176,7 @@ public class App {
         System.exit(0);
     }
 
+
     static boolean next() {
         Scanner scanner = new Scanner(System.in);
         String status;
@@ -93,13 +187,38 @@ public class App {
         }else if(status.equalsIgnoreCase("no")){
             return false;
         }else {
-            new CommandNotFound("tidak diketahui").showError();
+            new CommandNotFound("YANG ANDA MASUKKAN SALAH").commandNotFoundPilihan();
             return next();
         }
     }
-    static void aritmatika() {
-        System.out.println("-----ARITMATIKA-----");
-        String message = "1. Bilangan Bulat \n2. Bilangan Asli";
+}
+
+interface ClassInterfaces {
+    // TODO : NOT INTERFACE IMPLEMENTED
+}
+
+class ArithmeticOperation {
+
+    Helper helper= new Helper();
+
+    static boolean next() {
+        Scanner scanner = new Scanner(System.in);
+        String status;
+        System.out.print("Apakah anda ingin melanjutkan : (yes/no)");
+        status = scanner.nextLine();
+        if (status.equalsIgnoreCase("yes")) {
+            return true;
+        }else {
+            return false;
+        }
+    }
+
+    void start() {
+        helper.clearScreen();
+        System.out.println("----------ARITMATIKA----------");
+        String message =
+                        "1. Bilangan Bulat \n" +
+                        "2. Bilangan Asli";
         String pilihanUser;
         Scanner scanner;
 
@@ -108,7 +227,6 @@ public class App {
         System.out.print("Pilihan anda nomor : ");
         pilihanUser = scanner.next();
 
-
         if (pilihanUser.equalsIgnoreCase("2")) {
             double[] temp = inputDouble();
             adding(temp[0], temp[1]);
@@ -116,7 +234,13 @@ public class App {
             multiply(temp[0], temp[1]);
             modulo(temp[0], temp[1]);
             divide(temp[0], temp[1]);
-            start();
+            boolean next = next();
+            if (next == true) {
+                start();
+            }else {
+               Start.start();
+            }
+
         }else if (pilihanUser.equalsIgnoreCase("1")) {
             int[] temp = inputInt();
             adding(temp[0], temp[1]);
@@ -124,29 +248,44 @@ public class App {
             multiply(temp[0], temp[1]);
             modulo(temp[0], temp[1]);
             divide(temp[0], temp[1]);
-            start();
+            boolean next = next();
+            if (next == true) {
+                start();
+            }else {
+                End.end();
+            }
         }else {
-            System.out.println("ANDA MEMASUKKAN PILIHAN YANG SALAH");
-            aritmatika();
+            CommandNotFound commandNotFound = new CommandNotFound("YANG ANDA MASUKKAN SALAH");
+            commandNotFound.commandNotFoundPilihan();
+            new ArithmeticOperation().start();
         }
     }
+
     static int[] inputInt() {
         Scanner scanner = new Scanner(System.in);
-        int i,j;
+        String i,j;
         System.out.print("Masukkan angka pertama : ");
-        i = scanner.nextInt();
+        i = scanner.nextLine();
+
         System.out.print("Masukkan angka kedua   : ");
-        j = scanner.nextInt();
-        return new int[]{i,j};
+        j = scanner.nextLine();
+
+        int ii = Integer.parseInt(i);
+        int jj = Integer.parseInt(j);
+        return new int[]{ii,jj};
     }
     static double[] inputDouble() {
         Scanner scanner = new Scanner(System.in);
-        double i,j;
+        String i,j;
         System.out.print("Masukkan angka pertama : ");
-        i = scanner.nextDouble();
+        i = scanner.nextLine();
+
         System.out.print("Masukkan angka kedua   : ");
-        j = scanner.nextDouble();
-        return new double[]{i,j};
+        j = scanner.nextLine();
+
+        double ii = Double.parseDouble(i);
+        double jj = Double.parseDouble(j);
+        return new double[]{ii,jj};
     }
 
     static void adding(int x, int y) {
@@ -177,7 +316,7 @@ public class App {
         header("DIVIDE");
         showNumber(x,y);
         if (y == 0) {
-            throw new CannotDividedByZero("PEMBAGI TIDAK BOLEH DENGAN ANGKA NOL YA");
+            new CannotDividedByZero("PEMBAGI TIDAK BOLEH DENGAN ANGKA NOL YA");
         }else {
             System.out.println("HASIL PEMBAGIAN = " + (x / y));
         }
@@ -187,7 +326,7 @@ public class App {
         header("DIVIDE");
         showNumber(x,y);
         if (y == 0) {
-            throw new CannotDividedByZero("PEMBAGI TIDAK BOLEH DENGAN ANGKA NOL YA");
+            new CannotDividedByZero("PEMBAGI TIDAK BOLEH DENGAN ANGKA NOL YA");
         }else {
             System.out.println("HASIL PEMBAGIAN = " + (x / y));
         }
@@ -231,59 +370,110 @@ public class App {
     static void footer(){
         System.out.println("---------------");
     }
+}
 
+class Variable {
 
-    static void tabel() {
-        Scanner scanner = new Scanner(System.in);
+    private static int number      = 10;
+    private static String letter   = "a";
+    private static boolean result  = true;
+    private static String str      = "hello";
+
+    static void start() {
+        Scanner scannerAngka = new Scanner(System.in);
+        Scanner scannerChar = new Scanner(System.in);
+        Scanner scannerBool = new Scanner(System.in);
         Scanner scannerStr = new Scanner(System.in);
-        int number      = 10;
-        char letter     = 'a';
-        boolean result  = true;
-        String str      = "hello";
 
-        System.out.print("Masukkan angka     : ");
-        number = scanner.nextInt();
+        try {
+            System.out.print("Masukkan angka     : ");
+            number = scannerAngka.nextInt();
+        }catch (InputMismatchException ex) {
+            System.out.println("bukan angka yang anda masukkan, DEFAULT");
+        }
 
-        System.out.print("Masukkan boolean   : ");
-        result = scanner.nextBoolean();
+        try {
+            System.out.print("Masukkan character     : ");
+            letter = scannerChar.nextLine();
+            if (letter.length() != 1) {
+                System.out.println("bukan character yang anda masukkan, DEFAULT");
+            }
+        }catch (InputMismatchException ex) {
+            System.out.println("bukan character yang anda masukkan, DEFAULT");
+        }
 
-        System.out.print("Masukkan string    : ");
-        str = scannerStr.nextLine();
+        try {
+            System.out.print("Masukkan boolean   : ");
+            result = scannerBool.nextBoolean();
+        }catch (InputMismatchException ex) {
+            System.out.println("bukan boolean yang anda masukkan, DEFAULT");
+        }
+
+        try {
+            System.out.print("Masukkan string    : ");
+            str = scannerStr.nextLine();
+        }catch (InputMismatchException ex) {
+            System.out.println("bukan String yang anda masukkan, DEFAULT");
+        }
 
         System.out.println();
         showTableAnswer(number,letter,result,str);
     }
-    static void showTableAnswer(int number, char letter, boolean result, String str) {
+
+    static void showTableAnswer(int number, String letter, boolean result, String str) {
         System.out.println("Number : " + number);
         System.out.println("Letter : " + letter);
         System.out.println("Result : " + result);
         System.out.println("Str    : " + str);
-        start();
-    }
+        boolean next = Start.next();
+        if (next == true) {
+            start();
+        }else {
+            Start.start();
+        }
 
-    static void convert() {
+    }
+}
+
+class ConverterToSecond {
+
+    static void start() {
         int jam,menit,detik,result;
         final int satuJamKeDetik = 3600;
         final int satuMenitKeDetik = 60;
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("Masukkan jam   : ");
-        jam = scanner.nextInt();
-        System.out.print("Masukkan menit : ");
-        menit = scanner.nextInt();
-        System.out.print("Masukkan detik : ");
-        detik = scanner.nextInt();
 
-        result = (jam * satuJamKeDetik) + (menit * satuMenitKeDetik) + detik;
-        System.out.println("Data yang anda masukkan : ");
-        System.out.println("JAM   = " + jam);
-        System.out.println("MENIT = " + menit);
-        System.out.println("DETIK = " + detik);
-        System.out.println("TOTAL = " + result + " detik");
-        start();
+        try {
+            Scanner scanner = new Scanner(System.in);
+            System.out.print("Masukkan jam   : ");
+            jam = scanner.nextInt();
+
+            System.out.print("Masukkan menit : ");
+            menit = scanner.nextInt();
+
+            System.out.print("Masukkan detik : ");
+            detik = scanner.nextInt();
+
+            result = (jam * satuJamKeDetik) + (menit * satuMenitKeDetik) + detik;
+            System.out.println("Data yang anda masukkan : ");
+            System.out.println("JAM   = " + jam);
+            System.out.println("MENIT = " + menit);
+            System.out.println("DETIK = " + detik);
+            System.out.println("TOTAL = " + result + " detik");
+        }catch (InputMismatchException ex) {
+            Start.start();
+        }
+
+        boolean next = Start.next();
+        if (next == true) {
+            start();
+        }else {
+            Start.start();
+        }
     }
 
-
-    static void svt() {
+}
+class CalculationOfSpeedDistanceAndTime {
+    static void start() {
         int kecepatan = 0,jarak = 0,waktu = 0;
         int rumusJarak,rumusKecepatan,rumusWaktu;
 
@@ -306,8 +496,13 @@ public class App {
             waktu = scanner2.nextInt();
 
             rumusJarak = kecepatan * waktu;
-            System.out.println("JARAK YG DITEMPUH = " + rumusJarak);
-            start();
+            System.out.println("JARAK YG DITEMPUH = " + rumusJarak + "m");
+            boolean next = Start.next();
+            if (next == true) {
+                start();
+            }else {
+                Start.start();
+            }
         }else if (pilihan == 2) {
             System.out.println("----- MENENTUKAN KECEPATAN -----");
             Scanner scanner2 = new Scanner(System.in);
@@ -320,7 +515,12 @@ public class App {
             }
             rumusKecepatan = jarak / waktu;
             System.out.println("KECEPATAN  = " + rumusKecepatan + "m/s");
-            start();
+            boolean next = Start.next();
+            if (next == true) {
+                start();
+            }else {
+                Start.start();
+            }
         }else if (pilihan == 3) {
             System.out.println("----- MENENTUKAN WAKTU -----");
             Scanner scanner2 = new Scanner(System.in);
@@ -333,92 +533,124 @@ public class App {
                 throw new ArithmeticException("TAK BOLEH NOL LHOOOOOOOOOOOOO");
             }
             rumusWaktu = jarak / kecepatan;
-            System.out.println("WAKTU = " + rumusWaktu);
-            start();
+            System.out.println("WAKTU = " + rumusWaktu + "s");
+            boolean next = Start.next();
+            if (next == true) {
+                start();
+            }else {
+                Start.start();
+            }
         }else  {
             System.out.println("COMMAND NOT FOUND");
-            svt();
+          Start.start();
         }
     }
 }
 
-class CannotDividedByZero extends ArithmeticException{
-    public CannotDividedByZero(String message) {
-        super(message);
+class Helper {
+    void clearScreen(){
+        try {
+            if (System.getProperty("os.name").contains("Windows")){
+                new ProcessBuilder("cmd","/c","cls").inheritIO().start().waitFor();
+            } else {
+                System.out.print("\033\143");
+            }
+        } catch (Exception ex){
+            System.err.println("tidak bisa clear screen");
+        }
     }
+
 }
-class CommandNotFound {
+
+class CannotDividedByZero {
     private String message;
-    public CommandNotFound(String message){
+    public CannotDividedByZero(String message) {
         this.message = message;
     }
-    public void showError() {
-        System.out.println("PERINTAH " + message.toUpperCase());
+
+    void showError() {
+        System.out.println(this.message);
+
     }
 }
 
-class SignUp {
-    private String username;
-    private String password;
-    private String confirmPass;
+class CommandNotFound {
+    private String message;
+
+    public CommandNotFound(String failedMessage) {
+        this.message = failedMessage;
+    }
+
+    public void commandNotFoundPilihan() {
+        System.out.println("PILIHAN " + this.message);
+    }
+}
+
+class ValidatorErrorHandler{
+    private String status;
+
+    public ValidatorErrorHandler(String status) {
+        this.status = status;
+    }
 
     @Override
     public String toString() {
-        return "SignUp{" +
-                "username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", confirmPass='" + confirmPass + '\'' +
+        return "ValidatorErrorHandler{" +
+                "status='" + status + '\'' +
                 '}';
-    }
-
-    public String getConfirmPass() {
-        return confirmPass;
-    }
-
-    public void setConfirmPass(String confirmPass) {
-        this.confirmPass = confirmPass;
-    }
-
-    public SignUp(String username, String password, String confirmPass) {
-        this.username = username;
-        this.password = password;
-        this.confirmPass = confirmPass;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        SignUp signUp = (SignUp) o;
-        return Objects.equals(username, signUp.username) &&
-                Objects.equals(password, signUp.password);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(username, password);
     }
 }
 
-class Tetteeet {
-    public Tetteeet(String message) {
-        System.out.println(message.toUpperCase());
+class Validator {
+    String validate(String username,String password,String confirmPassword) {
+
+        String status;
+        if (username.length() < 3) {
+            status = STATUS.USERNAME_IS_TO_SHORT.name();
+            ValidatorErrorHandler sendErrorMessage = new ValidatorErrorHandler(status);
+            System.err.println(sendErrorMessage.toString());
+            return sendErrorMessage.toString();
+        }
+
+        if (password.length() < 6) {
+            status = STATUS.PASSWORD_AT_LEAST_6_CHARACTERS.name();
+            ValidatorErrorHandler sendErrorMessage = new ValidatorErrorHandler(status);
+            System.err.println(sendErrorMessage.toString());
+            return sendErrorMessage.toString();
+        }
+
+        if (!(password.equalsIgnoreCase(confirmPassword))) {
+            status = STATUS.PASSWORD_AND_CONFIRMPASSWORD_NOT_SAME.name();
+            ValidatorErrorHandler sendErrorMessage = new ValidatorErrorHandler(status);
+            System.err.println(sendErrorMessage.toString());
+            return sendErrorMessage.toString();
+        }
+
+        username = username.trim();
+        username = username.replaceAll("\\s+","");
+
+        return STATUS.VALIDATED.name();
+    }
+
+    void stopProgram() {
         System.exit(0);
     }
+}
+
+class End {
+    static void end() {
+        System.out.println("BYE BYE");
+        System.exit(0);
+    }
+}
+
+enum STATUS {
+    VALIDATED,
+    USERNAME_IS_TO_SHORT,
+    PASSWORD_AT_LEAST_6_CHARACTERS,
+    PASSWORD_AND_CONFIRMPASSWORD_NOT_SAME,
+    SIGN_UP_SUCCESFULLY,
+    SIGN_UP_FAILED,
+    LOGIN_SUCCESSFULLY,
+    ACCOUNT_NOTFOUND,
 }

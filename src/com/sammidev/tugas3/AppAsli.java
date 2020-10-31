@@ -48,7 +48,6 @@ public class AppAsli {
         System.out.println("JAM   = " + jamInput);
         System.out.println("MENIT = " + menitInput);
         System.out.println("TOTAL DETIK = " + result);
-
     }
 
     static void soalNo2() {
