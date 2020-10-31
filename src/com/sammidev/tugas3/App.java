@@ -4,18 +4,40 @@ import java.util.*;
 
 public class App {
     public static void main(String[] args) {
-        new SignUp().signUp();
+        choose();
     }
 
+    static void choose() {
+        new Helper().clearScreen();
+        int pilihan;
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("1. Sign Up");
+        System.out.println("2. Sign In");
+        try {
+            System.out.print("Masukkan pilihan : ");
+            pilihan = scanner.nextInt();
+            if (pilihan == 1) {
+                new SignUp().signUp();
+            }else if(pilihan == 2) {
+                Login login = new Login();
+                login.signIn();
+            }else {
+                choose();
+            }
+        }catch (InputMismatchException ex) {
+            choose();
+        }
+    }
 }
 
 class SignUp {
     private String username;
     private String password;
     private String confirmPassword;
-    static List<String> accounts = new ArrayList<>();
+    static Set<String> accounts = new HashSet<>();
 
     void signUp() {
+
         Helper helper = new Helper();
         helper.clearScreen();
         System.out.println("----------PLEASE SIGN UP----------");
@@ -41,6 +63,14 @@ class SignUp {
         if (!(validationCheck.equalsIgnoreCase(STATUS.VALIDATED.name()))) {
             System.out.println(STATUS.SIGN_UP_FAILED.name());
             helper.clearScreen();
+
+            boolean next = Start.next();
+            if (next == true) {
+               SignUp signUp = new SignUp();
+               signUp.signUp();
+            }else {
+                System.exit(0);
+            }
             signUp();
         }
 
@@ -100,10 +130,18 @@ class SignUp {
 }
 
 class Login {
+
     private String username;
     private String password;
 
-    boolean signIn() {
+    void signIn() {
+
+        Set<String> datas = Set.of(
+                "aminuddin,aminuddin555",
+                "sammidev,samidev",
+                "adidtya,adidtya123");
+
+        SignUp.accounts.addAll(datas);
         Helper cls = new Helper();
         cls.clearScreen();
 
@@ -124,19 +162,28 @@ class Login {
             if (data.equalsIgnoreCase(credential)) {
                 System.out.println(STATUS.LOGIN_SUCCESSFULLY.name());
                 new Start().start();
-            }else {
-                System.err.println(STATUS.ACCOUNT_NOTFOUND.name());
-                signIn();
+                new Start().header(this.username);
             }
         });
 
-        return true;
+        boolean next = Start.next();
+        if (next == true) {
+           signIn();
+        }else {
+          SignUp signUp =  new SignUp();
+          signUp.signUp();
+        }
     }
 }
 
 class Start {
 
+    private static String name;
+
     static void start() {
+
+        System.out.println("WELCOME " + Start.name);
+
         Helper helper = new Helper();
         helper.clearScreen();
         int pilihan;
@@ -174,6 +221,10 @@ class Start {
 
         System.out.println("THANK YOU");
         System.exit(0);
+    }
+
+    void header(String name) {
+        this.name = name;
     }
 
 
