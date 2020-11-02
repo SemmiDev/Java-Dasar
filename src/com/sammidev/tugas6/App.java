@@ -4,8 +4,8 @@ import java.util.Scanner;
 
 public class App {
     public static void main(String[] args) {
-        soal1();
-//        soal2();
+//        soal1();
+        soal2();
 //        soal3();
     }
 
