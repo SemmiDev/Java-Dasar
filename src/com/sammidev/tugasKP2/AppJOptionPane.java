@@ -1,4 +1,4 @@
-package com.sammidev.tugas7;
+package com.sammidev.tugasKP2;
 
 import javax.swing.*;
 import java.io.FileWriter;
@@ -7,7 +7,7 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 public class AppJOptionPane {
-    static String name = "User";
+    static String name = "USER";
 
     public static void main(String[] args) {
         greeting();
@@ -15,12 +15,13 @@ public class AppJOptionPane {
 
     static void greeting() {
         JOptionPane.showMessageDialog(null, "Selamat Datang");
-        AppJOptionPane.name =  JOptionPane.showInputDialog("Masukkan nama anda : ");
+        AppJOptionPane.name =  JOptionPane.showInputDialog("Masukkan Nama Anda ");
         log("USER LOGIN WITH NAME " + AppJOptionPane.name);
         menu();
     }
 
     static void menu() {
+        log(AppJOptionPane.name + " Mengakses menu");
         String mainMessage = "Selamat Datang " + AppJOptionPane.name + "\n" +
                 "1. Upah Karyawan \n" +
                 "2. Cek Status Suhu \n" +
@@ -31,7 +32,16 @@ public class AppJOptionPane {
                 "\n Masukkan pilihan anda" ;
 
         String pilihan =  JOptionPane.showInputDialog(mainMessage);
-        switch (Integer.parseInt(pilihan)) {
+        int choose = 0;
+        try {    
+            choose = Integer.parseInt(pilihan);
+        }catch (NumberFormatException ex) {
+            log("Kesalahan input, gagal parsing dari string to integer");
+            JOptionPane.showMessageDialog(null, "Input Salah");
+            menu();
+        }
+
+        switch (choose) {
             case 1 :
                 Options.upahKaryawan();
                 break;
@@ -45,7 +55,7 @@ public class AppJOptionPane {
             case 5:
                 Options.compare3Number();
             case 6:
-                log(AppJOptionPane.name + " exit dari program");
+                log(AppJOptionPane.name + AppJOptionPane.name + " Keluar dari program");
                 JOptionPane.showMessageDialog(null, "Terima Kasih " + AppJOptionPane.name);
                 System.exit(0);
             default:
@@ -88,16 +98,17 @@ public class AppJOptionPane {
     static class Options {
 
         static void upahKaryawan() {
-            log(AppJOptionPane.name + " mengakses upah karyawan");
+            log(AppJOptionPane.name + " Mengakses upah karyawan");
             final int UPAH_PER_JAM = 2000;
             final int UPAH_PER_JAM_LEMBUR = 3000;
             final int LIMIT = 48;
             int jam = 0, jamLembur = 0, gaji, gajiLembur = 0;
 
-            String pilihan =  JOptionPane.showInputDialog("Masukkan total jam anda bekerja : ");
+            String pilihan =  JOptionPane.showInputDialog("Masukkan total jam anda bekerja");
             try {
                 jam = Integer.parseInt(pilihan);
             }catch (NumberFormatException ex) {
+                log(AppJOptionPane.name + " Memasukkan input yang salah");
                 JOptionPane.showMessageDialog(null, "Bukan angka yang anda masukkan");
                 compare3Number();
             }
@@ -110,80 +121,106 @@ public class AppJOptionPane {
                 gaji = gajiLembur + (jam - jamLembur) * UPAH_PER_JAM;
             }
 
-            final String result = "Jam kerja lembur anda = " + jamLembur + " jam\n" +
-                    "Bonus hasil kerja lembur = Rp." + gajiLembur + "\n" +
-                    "Total gaji 		      = Rp." + gaji;
+            final String result =
+                    "Jam kerja lembur anda    : " + jamLembur + " jam\n" +
+                    "Bonus hasil kerja lembur : Rp " + gajiLembur + "\n" +
+                    "Total gaji : Rp " + gaji;
             JOptionPane.showMessageDialog(null, result);
             next();
         }
+
         static void cekSuhu() {
-            log(AppJOptionPane.name + " mengakses suhu");
+            log(AppJOptionPane.name + " Mengakses cek suhu");
             int suhu = 0;
             String pilihan =  JOptionPane.showInputDialog("Masukkan suhu");
             try {
                 suhu = Integer.parseInt(pilihan);
             }catch (NumberFormatException ex) {
+                log(AppJOptionPane.name + " Memasukkan input yang salah");
                 JOptionPane.showMessageDialog(null, "Bukan angka yang anda masukkan");
                 compare3Number();
             }
 
             // switch with lambda style
             String status = switch (suhu) {
-                case 30 -> suhu + " Derajat = PANAS  (HOT)";
-                case 24 -> suhu + " Derajat = NORMAL (NORMAL)";
-                case 20 -> suhu + " Derajat = DINGIN (COOL)";
-                default -> suhu + " = STATUS SUHU TIDAK DIKETAHUI";
+                case 30 -> suhu + " Derajat, " + StatusSuhu.PANAS.getDescription();
+                case 24 -> suhu + " Derajat, " + StatusSuhu.NORMAL.getDescription();
+                case 20 -> suhu + " Derajat, " + StatusSuhu.DINGIN.getDescription();
+                default -> suhu + " Derajat, " + StatusSuhu.TIDAK_DIKETAHUI.getDescription();
             };
-
+            log(AppJOptionPane.name + " Status Suhu " + status);
             JOptionPane.showMessageDialog(null, status);
             next();
         }
 
+        enum StatusSuhu {
+            PANAS("THE TEMPERATURE STATUS IS HOT (PANAS)"),
+            NORMAL("THE TEMPERATURE STATUS IS NORMAL (NORMAL)"),
+            DINGIN("THE TEMPERATURE STATUS IS COLD (DINGIN)"),
+            TIDAK_DIKETAHUI("THE TEMPERATURE STATUS IS NOT FOUND (TIDAK DIKETAHUI)");
+
+            private final String description;
+            StatusSuhu(String description) {
+                this.description = description;
+            }
+
+            public String getDescription() {
+                return description;
+            }
+        }
+
         static void tunjangan() {
-            log(AppJOptionPane.name + " mengakses golongan");
+            log(AppJOptionPane.name + " Mengakses tunjangan berdasarkan golongan");
             String golongan =  JOptionPane.showInputDialog("Masukkan golongan (A,B,C, atau D) ");
 
-            double gajiBersih = 0, tunjangan;
-            final double golonganA = 400, golonganB = 500, golonganC = 750, golonganD = 900;
+            double gajiBersih = 0, tunjangan = 0;
+            final double golonganA = 400000, golonganB = 500000, golonganC = 750000, golonganD = 900000;
+            double pajak = 0;
 
             if (golongan.equalsIgnoreCase("A")) {
-                tunjangan = 0.05 * golonganA;
-                gajiBersih = golonganA + ((0.3 * golonganA) + tunjangan) + tunjangan;
+                tunjangan = 0.3 * golonganA;
+                pajak = (0.05 * golonganA) + tunjangan;
+                gajiBersih = golonganA + tunjangan - pajak;
             } else if (golongan.equalsIgnoreCase("B")) {
-                tunjangan = 0.05 * golonganB;
-                gajiBersih = golonganB + ((0.3 * golonganB) + tunjangan) + tunjangan;
+                tunjangan = 0.3 * golonganB;
+                pajak = (0.05 * golonganB) + tunjangan;
+                gajiBersih = golonganB + tunjangan - pajak;
             } else if (golongan.equalsIgnoreCase("C")) {
-                tunjangan = 0.05 * golonganC;
-                gajiBersih = golonganC + ((0.3 * golonganC) + tunjangan) + tunjangan;
+                tunjangan = 0.3 * golonganC;
+                pajak = (0.05 * golonganC) + tunjangan;
+                gajiBersih = golonganC + tunjangan - pajak;
             } else if (golongan.equalsIgnoreCase("D")) {
-                tunjangan = 0.05 * golonganD;
-                gajiBersih = golonganD + ((0.3 * golonganD) + tunjangan) + tunjangan;
+                tunjangan = 0.3 * golonganD;
+                pajak = (0.05 * golonganD) + tunjangan;
+                gajiBersih = golonganD + tunjangan - pajak;
             } else {
                tunjangan();
             }
 
             final String result = "" +
-                    "Nama        : " + name + "\n" +
-                    "Golongan    : " + golongan + "\n" +
-                    "Gaji bersih : " + gajiBersih + "\n\n" +
-                    "FILE NOTA BERHASIL DIBUAT";
-            log(AppJOptionPane.name + " file nota berhasil dibuat");
+                    "Nama : " + name + "\n" +
+                    "Golongan : " + golongan + "\n" +
+                    "Tunjangan : Rp "+ tunjangan + "\n" +
+                    "Pajak : Rp " + pajak + "\n" +
+                    "Gaji bersih : Rp " + gajiBersih + "\n";
+            log(AppJOptionPane.name + " File slip gaji berhasil dibuat");
 
-            String fileName = "src\\com\\sammidev\\tugas7\\nota-" + AppJOptionPane.name + ".txt";
+            String fileName = "src\\com\\sammidev\\tugasKP2\\SlipGaji-" + AppJOptionPane.name + ".txt";
             try {
                 FileWriter fileWriter = new FileWriter(fileName);
                 fileWriter.write(result);
                 fileWriter.close();
             } catch (IOException e) {
-                System.out.println("FAILED ");
+                log("FAILED GENERATE AND WRITE FILE SALARY SLIP");
             }
 
             JOptionPane.showMessageDialog(null, result);
+            JOptionPane.showMessageDialog(null, "Hay, " + AppJOptionPane.name + ". File slip gaji kamu telah berhasil dibuat");
             next();
         }
 
         static void compare2Number() {
-            log(AppJOptionPane.name + " mengakses compare 2  numbers");
+            log(AppJOptionPane.name + " Mengakses compare 2  numbers");
             int angka1 = 0, angka2 = 0;
             String angka1A =  JOptionPane.showInputDialog("Masukkan angka pertama ");
             String angka1B =  JOptionPane.showInputDialog("Masukkan angka kedua ");
@@ -192,8 +229,8 @@ public class AppJOptionPane {
                 angka1 = Integer.parseInt(angka1A);
                 angka2 = Integer.parseInt(angka1B);
             }catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(null, "Bukan angka yang anda masukkan");
-                compare3Number();
+                showErrorNumberFormat();
+                compare2Number();
             }
 
             /*
@@ -210,6 +247,11 @@ public class AppJOptionPane {
             next();
         }
 
+        static void showErrorNumberFormat(){
+            log(AppJOptionPane.name + " Memasukkan input yang salah");
+            JOptionPane.showMessageDialog(null, "Bukan angka yang anda masukkan");
+        }
+
         static void compare3Number() {
             log(AppJOptionPane.name + " mengakses compare 3 numbers");
             int angka1 = 0, angka2 = 0, angka3 = 0;
@@ -219,14 +261,27 @@ public class AppJOptionPane {
             String angka1C =  JOptionPane.showInputDialog("Masukkan angka ketiga");
             try {
                 angka1 = Integer.parseInt(angka1A);
-                angka2 = Integer.parseInt(angka1B);
-                angka3 = Integer.parseInt(angka1C);
             }catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(null, "Bukan angka yang anda masukkan");
+                showErrorNumberFormat();
                 compare3Number();
             }
 
-            int angkaTerkecil = angka1, angkaTerbesar = angka1;
+            try {
+                angka2 = Integer.parseInt(angka1B);
+            }catch (NumberFormatException ex) {
+                showErrorNumberFormat();
+                compare3Number();
+            }
+
+            try {
+                angka3 = Integer.parseInt(angka1C);
+            }catch (NumberFormatException ex) {
+                showErrorNumberFormat();
+                compare3Number();
+            }
+
+            int angkaTerkecil = angka1;
+            int angkaTerbesar = angka1;
 
             // TERKECIL
             if (angka2 < angkaTerkecil) angkaTerkecil = angka2;
@@ -240,6 +295,7 @@ public class AppJOptionPane {
                     "Angka terkecil = " + angkaTerkecil + "\n" +
                     "Angka terbesar = " + angkaTerbesar;
             JOptionPane.showMessageDialog(null, result);
+            log("Result " + result);
             next();
         }
 
@@ -249,8 +305,10 @@ public class AppJOptionPane {
             if (Integer.parseInt(pilihan) == 1) {
                 menu();
             }else if(Integer.parseInt(pilihan) == 2){
+                log(AppJOptionPane.name + " Keluar dari program");
                 System.exit(0);
             }else {
+                log(AppJOptionPane.name + " redirect ke menu next " );
                 next();
             }
         }

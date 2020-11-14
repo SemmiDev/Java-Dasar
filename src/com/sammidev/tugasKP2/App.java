@@ -1,4 +1,4 @@
-package com.sammidev.tugas7;
+package com.sammidev.tugasKP2;
 
 import java.util.Scanner;
 
@@ -16,21 +16,22 @@ public class App {
 		final int UPAH_PER_JAM = 2000;
 		final int UPAH_PER_JAM_LEMBUR = 3000;
 		final int LIMIT = 48;
-		int jam,
-				jamLembur = 0,
-				gaji = 0,
-				gajiLembur = 0;
+		int jam;
+		int jamLembur = 0;
+		int gaji = 0;
+		int	gajiLembur = 0;
 
 
 		System.out.print("Masukkan total jam anda bekerja : ");
 		jam = scanner();
 
-		if (jam <= LIMIT) gaji = jam * UPAH_PER_JAM;
-		else
+		if (jam <= LIMIT) {
+			gaji = jam * UPAH_PER_JAM;
+		}else  {
 			jamLembur = jam - LIMIT;
-		gajiLembur = jamLembur * UPAH_PER_JAM_LEMBUR;
-		gaji = gajiLembur + (jam - jamLembur) * UPAH_PER_JAM;
-
+			gajiLembur = jamLembur * UPAH_PER_JAM_LEMBUR;
+			gaji = gajiLembur + (jam - jamLembur) * UPAH_PER_JAM;
+		}
 
 		System.out.println("Jam kerja lembur anda : " + jamLembur + " jam\n" +
 				"Bonus hasil kerja lembur : Rp." + gajiLembur + "\n" +
@@ -61,44 +62,52 @@ public class App {
 		String name = scanner("Masukkan Nama");
 		String golongan = scanner("Masukkan Golongan");
 
-		double gajiBersih = 0, pajak, tunjangan;
-		final double golonganA = 400,
-				golonganB = 500,
-				golonganC = 750,
-				golonganD = 900;
+		double gajiBersih = 0, pajak = 0, tunjangan = 0;
+		final double golonganA = 400000;
+		final double golonganB = 500000;
+		final double golonganC = 750000;
+		final double golonganD = 900000;
 
 		if (golongan.equalsIgnoreCase("A")) {
-			tunjangan = 0.05 * golonganA;
-			gajiBersih = golonganA + ((0.3 * golonganA) + tunjangan) + tunjangan;
+			tunjangan = 0.3 * golonganA;
+			pajak = (0.05 * golonganA) + tunjangan;
+			gajiBersih = golonganA + tunjangan - pajak;
 		} else if (golongan.equalsIgnoreCase("B")) {
-			tunjangan = 0.05 * golonganB;
-			gajiBersih = golonganB + ((0.3 * golonganB) + tunjangan) + tunjangan;
+			tunjangan = 0.3 * golonganB;
+			pajak = (0.05 * golonganB) + tunjangan;
+			gajiBersih = golonganB + tunjangan - pajak;
 		} else if (golongan.equalsIgnoreCase("C")) {
-			tunjangan = 0.05 * golonganC;
-			gajiBersih = golonganC + ((0.3 * golonganC) + tunjangan) + tunjangan;
+			tunjangan = 0.3 * golonganC;
+			pajak = (0.05 * golonganC) + tunjangan;
+			gajiBersih = golonganC + tunjangan - pajak;
 		} else if (golongan.equalsIgnoreCase("D")) {
-			tunjangan = 0.05 * golonganD;
-			gajiBersih = golonganD + ((0.3 * golonganD) + tunjangan) + tunjangan;
+			tunjangan = 0.3 * golonganD;
+			pajak = (0.05 * golonganD) + tunjangan;
+			gajiBersih = golonganD + tunjangan - pajak;
 		} else {
-			System.out.println("Golongan Salah");
-			System.exit(0);
+			soal3();
 		}
 
-		System.out.println("Nama         : " + name + "\n" +
-				"Golongan     : " + golongan + "\n" +
-				"Gaji bersih  : " + gajiBersih);
+		final String result = "" +
+				"Nama        : " + name + "\n" +
+				"Golongan    : " + golongan + "\n" +
+				"Tunjangan   : Rp "+ tunjangan + "\n" +
+				"Pajak       : Rp " + pajak + "\n" +
+				"Gaji bersih : Rp " + gajiBersih + "\n\n";
+		System.out.println(result);
 	}
 
 	static void soal4a() {
 		/* TERNARY OPERATOR
 			int besar = if (angka1 < angka2) ? angka2 : angka1;
 		*/
+
 		clearScreen();
 		int angka1, angka2, angka3;
 		System.out.print("Masukkan angka pertama : ");
 		angka1 = scanner();
 
-		System.out.print("Masukkan angka kedua: ");
+		System.out.print("Masukkan angka kedua : ");
 		angka2 = scanner();
 
 		int besar = Math.max(angka1, angka2);
