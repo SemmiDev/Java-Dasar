@@ -1,7 +1,0 @@
-Nama : sammi
-Golongan : d
-Tunjangan : Rp 270000.0
-Pajak : Rp 315000.0
-Gaji bersih : Rp 855000.0
-
-FILE NOTA BERHASIL DIBUAT1

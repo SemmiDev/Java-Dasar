@@ -44,9 +44,27 @@ public class App {
 		Scanner scanner = new Scanner(System.in);
 		System.out.print("Masukkan Suhu : ");
 		suhu = scanner.nextInt();
+		String status;
 
-		// switch with lambda style
-		String status = switch (suhu) {
+		/**
+		* jika teman2 pake JDK 8 silahkan pakai kode switch style dibawah ini
+		*  		switch (suhu) {
+		* 			case 30 :
+		* 				status = "Panas";
+		* 				break;
+		* 			case 24 :
+		* 				status = "Normal";
+		* 				break;
+		* 			case 20 :
+		* 				status = "Dingin";
+		* 				break;
+		* 			default:
+		* 				status = "STATUS SUHU TIDAK DIKETAHUI";
+		*        }
+		*/
+
+		// Jika teman2 pake "JDK >= 14", bisa pakai switch with lambda style seperti ini
+		status = switch (suhu) {
 			case 30 -> "Panas";
 			case 24 -> "Normal";
 			case 20 -> "Dingin";
