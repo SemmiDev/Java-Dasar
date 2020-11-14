@@ -3,17 +3,22 @@ package com.sammidev.tugasKP2;
 import javax.swing.*;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 public class AppJOptionPane {
     static String name = "USER";
+    static String dir;
+    static Logs logs = new Logs();
 
     public static void main(String[] args) {
-        greeting();
+        start();
     }
 
-    static void greeting() {
+    static void start() {
         JOptionPane.showMessageDialog(null, "Selamat Datang");
         AppJOptionPane.name =  JOptionPane.showInputDialog("Masukkan Nama Anda ");
         log("USER LOGIN WITH NAME " + AppJOptionPane.name);
@@ -21,8 +26,10 @@ public class AppJOptionPane {
     }
 
     static void menu() {
+        AppJOptionPane.dir = "C:\\Users\\DELL\\Desktop\\JavaDasar-jawaban-soal-teman\\src\\com\\sammidev\\tugasKP2\\data-" + AppJOptionPane.name + "\\";
+        createFolderForUser();
         log(AppJOptionPane.name + " Mengakses menu");
-        String mainMessage = "Selamat Datang " + AppJOptionPane.name + "\n" +
+        String mainMessage = "Selamat Datang " + AppJOptionPane.name + " :) \n" +
                 "1. Upah Karyawan \n" +
                 "2. Cek Status Suhu \n" +
                 "3. Gaji Bersih Karyawan \n" +
@@ -55,9 +62,7 @@ public class AppJOptionPane {
             case 5:
                 Options.compare3Number();
             case 6:
-                log(AppJOptionPane.name + AppJOptionPane.name + " Keluar dari program");
-                JOptionPane.showMessageDialog(null, "Terima Kasih " + AppJOptionPane.name);
-                System.exit(0);
+                Options.next();
             default:
                 menu();
         }
@@ -87,12 +92,13 @@ public class AppJOptionPane {
         bulan = date.get(Calendar.MONTH);
         tahun = date.get(Calendar.YEAR);
 
-        System.out.println(
-                hari + " " +
+        String log = hari + " " +
                 months[bulan] + " " +
                 tahun + " -> " +
                 jam + ":" +
-                menit + ":" + detik + " ->> " + message);
+                menit + ":" + detik + " ->> " + message;
+        logs.add(log + "\n");
+        System.out.println(log);
     }
 
     static class Options {
@@ -203,20 +209,10 @@ public class AppJOptionPane {
                     "Tunjangan : Rp "+ tunjangan + "\n" +
                     "Pajak : Rp " + pajak + "\n" +
                     "Gaji bersih : Rp " + gajiBersih + "\n";
-            log(AppJOptionPane.name + " File slip gaji berhasil dibuat");
-
-            String fileName = "src\\com\\sammidev\\tugasKP2\\SlipGaji-" + AppJOptionPane.name + ".txt";
-            try {
-                FileWriter fileWriter = new FileWriter(fileName);
-                fileWriter.write(result);
-                fileWriter.close();
-            } catch (IOException e) {
-                log("FAILED GENERATE AND WRITE FILE SALARY SLIP");
-            }
-
+            log("Data " + result);
             JOptionPane.showMessageDialog(null, result);
-            JOptionPane.showMessageDialog(null, "Hay, " + AppJOptionPane.name + ". File slip gaji kamu telah berhasil dibuat");
-            next();
+
+            printSalarySlip(result);
         }
 
         static void compare2Number() {
@@ -300,17 +296,104 @@ public class AppJOptionPane {
         }
 
         static void next() {
-            String pilihan =  JOptionPane.showInputDialog("1. Menu \n" + "2. Exit");
-            log(AppJOptionPane.name + " memasukkan pilihan " + pilihan);
-            if (Integer.parseInt(pilihan) == 1) {
-                menu();
-            }else if(Integer.parseInt(pilihan) == 2){
+            int jawab = JOptionPane.showOptionDialog(null,
+                    "Apakah anda ingin keluar ?",
+                    "CONFIRMATION",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE, null,null,null);
+
+            if (jawab == JOptionPane.YES_OPTION){
                 log(AppJOptionPane.name + " Keluar dari program");
-                System.exit(0);
-            }else {
-                log(AppJOptionPane.name + " redirect ke menu next " );
-                next();
+                questionLog();
+            }
+            menu();
+        }
+
+        static void printSalarySlip(String result) {
+            int jawab = JOptionPane.showOptionDialog(null,
+                    "Apakah anda ingin cetak slip gaji ?",
+                    "PRINT",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE, null,null,null);
+
+            if (jawab == JOptionPane.YES_OPTION) {
+                String fileName = AppJOptionPane.dir + "SLIP-GAJI-" + AppJOptionPane.name + ".txt";
+                try {
+                    FileWriter fileWriter = new FileWriter(fileName);
+                    fileWriter.write(result);
+                    fileWriter.close();
+                } catch (IOException e) {
+                    log("FAILED GENERATE AND WRITE FILE SALARY SLIP");
+                }
+
+                JOptionPane.showMessageDialog(null, "Hay, " +
+                        AppJOptionPane.name.toUpperCase() + ".. File slip gaji kamu telah berhasil dibuat");
+            }
+            next();
+        }
+
+        static void questionLog() {
+            int quest = JOptionPane.showConfirmDialog(null,
+                    "Apakah anda ingin generate logs ke file ? \n ");
+
+            switch (quest) {
+                case JOptionPane.YES_OPTION:
+                    printLog();
+                    JOptionPane.showMessageDialog(null, "DONE! \nTerima Kasih");
+                    clearScreen();
+                    System.exit(0);
+                case JOptionPane.CANCEL_OPTION:
+                    JOptionPane.showMessageDialog(null, "Terima Kasih");
+                    System.exit(0);
+                case JOptionPane.NO_OPTION:
+                    questionLog();
+                default:
+                    questionLog();
             }
         }
+
+        static void clearScreen() {
+            try {
+                if (System.getProperty("os.name").contains("Windows")) {
+                    new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+                } else {
+                    System.out.print("\033\143");
+                }
+            } catch (Exception ex) {
+                System.err.println("tidak bisa clear screen");
+            }
+        }
+
+        private static void printLog() {
+            String fileName = AppJOptionPane.dir + "LOGS-" + AppJOptionPane.name + ".txt";
+            try {
+                FileWriter fileWriter = new FileWriter(fileName);
+                fileWriter.write(logs.toString());
+                fileWriter.close();
+            } catch (IOException e) {
+                log("FAILED GENERATE LOGS");
+                System.exit(0);
+            }
+        }
+    }
+    static void createFolderForUser() {
+        try {
+            Path path = Paths.get(AppJOptionPane.dir);
+            Files.createDirectories(path);
+        } catch (IOException e) {
+            System.out.println("FAILED TO CREATE DIRECTORY : " +  e.getMessage());
+        }
+    }
+}
+
+class Logs {
+    final private StringBuilder logs = new StringBuilder("");
+
+    public void add(String message) {
+        this.logs.append(message);
+    }
+
+    public String toString() {
+        return logs.toString();
     }
 }
