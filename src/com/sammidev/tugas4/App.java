@@ -8,11 +8,12 @@ public class App {
         // flowchart = ladangprogrammer.blogspot.com
         // keyword   = contoh algoritma flowchart dan pseudocode
 
-        luasLingkaran();
-        jamMenitToDetik();
-        genapGanjil();
-        luasLingkaran();
-        minMaxRataRata();
+//        luasLingkaran();
+//        jamMenitToDetik();
+//        genapGanjil();
+//        luasLingkaran();
+//        minMaxRataRata();
+        answer();
     }
 
     static void luasPersegiPanjang() {
@@ -114,5 +115,21 @@ public class App {
         System.out.println("maximum   = " + max);
         System.out.println("minimum   = " + min);
         System.out.println("rata-rata = " + average / kumpulanAngka.length);
+    }
+
+
+    static void answer() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Banyaknya data : ");
+        int banyakData = scanner.nextInt();
+        double total = 0;
+
+        for (int i = 0; i < banyakData; i++) {
+            Scanner input = new Scanner(System.in);
+            System.out.print("Data ke-" + (i + 1) + " : " );
+            total += input.nextDouble();
+        }
+        System.out.println("Rata-rata : " + total / banyakData);
+        System.out.println("Jumalh    : " + total);
     }
 }
