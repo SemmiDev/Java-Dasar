@@ -3,12 +3,12 @@ import java.util.*;
 
 public class Main {
 	public static void main(String[] args) {
-		soal1();
-		soal2();
+//		soal1();
+//		soal2();
 		soal3();
-		soal4();
-		soal4Gaya2();
-		soal5();
+//		soal4();
+//		soal4Gaya2();
+//		soal5();
 	}
 
 	static void soal1() {
@@ -19,7 +19,7 @@ public class Main {
 		Scanner scanner = new Scanner(System.in);
 		System.out.print("Masukkan angka : ");
 		n = scanner.nextInt();
-		
+
 		for (int i = 1; i <= n; i++) {
 			System.out.println("Angka ke-" + i);
 			total += i;
@@ -74,12 +74,28 @@ public class Main {
 		System.out.print("Masukkan angka : ");
 		n = scanner.nextInt();
 
+	List<Integer> oddList = new ArrayList<>();
 		for (int i = 1; i <= n; i++) {
 			if (i % 2 != 0) {
-				System.out.println(i);
+				oddList.add(i);
 			}
 		}
-		System.out.println("----------------------------------\n\n");
+		int limit = 10, j = 0;
+		try {
+			do  {
+				for (int i = j; i < limit; i++) {
+					if (oddList.get(i) < 10) {
+						System.out.print("  " + oddList.get(i) + "  ");
+					}else{
+						System.out.print(" " + oddList.get(i) + "  ");
+					}
+				}
+				System.out.println();
+				j += 10;
+				limit += 10;
+
+			}while (true);
+		}catch (IndexOutOfBoundsException ignored) {}
 	}
 
 	static void soal4() {
