@@ -1,9 +1,11 @@
-package com.sammidev.tugas1;
+//package com.sammidev.tugas1;
 
+import javax.swing.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.util.*;
 
 public class Main {
-
     public static void main(String[] args) {
         programBelanja();
         programKaryawan();
