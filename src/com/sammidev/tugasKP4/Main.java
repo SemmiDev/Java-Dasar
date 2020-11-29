@@ -15,7 +15,7 @@ public class Main {
                         "\nThe square of double 7.5 is "+square(7.5));
         dadu();
 
-        mathApi();
+        mathAPI();
         minimumFunction(2,3);
         rankPointProcedure(89);
         swapProcedure(30,45);
