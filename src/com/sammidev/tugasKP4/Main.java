@@ -14,6 +14,15 @@ public class Main {
                 "The square of integer 7 is "+square(7)+
                         "\nThe square of double 7.5 is "+square(7.5));
         dadu();
+
+        mathApi();
+        minimumFunction(2,3);
+        rankPointProcedure(89);
+        swapProcedure(30,45);
+        square(7);
+        square(7.5);
+
+
     }
 
     /*
