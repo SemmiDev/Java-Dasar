@@ -137,7 +137,7 @@ public class Main {
 		double hargaBarang;
 		int totalHarga = 0;
 
-		do {
+		while(true) {
 			System.out.print("Masukkan jumlah barang : ");
 			jumlahBarang = new Scanner(System.in).nextInt();
 			if (jumlahBarang == 0) {
@@ -146,7 +146,7 @@ public class Main {
 			System.out.print("Masukkan harga barang  : ");
 			hargaBarang = new Scanner(System.in).nextDouble();
 			totalHarga += hargaBarang * jumlahBarang;
-		}while(true);
+		}
 	}
 
 	static void show(int totalHarga) {
