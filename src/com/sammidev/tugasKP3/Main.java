@@ -145,8 +145,8 @@ public class Main {
 			}
 			System.out.print("Masukkan harga barang  : ");
 			hargaBarang = new Scanner(System.in).nextDouble();
-			totalHarga += hargaBarang;
-		}while(jumlahBarang != 0);
+			totalHarga += hargaBarang * jumlahBarang;
+		}while(true);
 	}
 
 	static void show(int totalHarga) {
