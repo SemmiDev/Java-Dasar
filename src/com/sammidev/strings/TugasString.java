@@ -4,9 +4,9 @@ public class TugasString {
     public static void main(String[] args) {
 
         // soal 1
-        String a = "PHP Exercises and";
-        String b = "Python Exercises";
-        String concatenated = a + " " + b;
+        StringBuffer a = new StringBuffer("PHP Exercises and");
+        StringBuffer b = new StringBuffer("Python Exercises");
+        String concatenated = a.append(" ").append(b).toString();
         System.out.println(concatenated); // PHP Exercises and Python Exercises
 
 

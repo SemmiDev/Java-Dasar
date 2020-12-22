@@ -32,5 +32,17 @@ public class Main {
         // concat()
         var concat = name + " ganteng" + " hahaha";
         System.out.println(concat); // SaIREPLACETmldhi Yanto ganteng hahaha
+
+        char[] arrName = {'S','a','m'};
+        String nickname = new String(arrName);
+        System.out.println(nickname);
+
+        StringBuffer sample = new StringBuffer("sammidev");
+        int cap = sample.capacity();
+        System.out.println(cap);
+
+        System.out.println(sample.charAt(5));
+
     }
 }
+
