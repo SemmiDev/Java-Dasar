@@ -1,6 +1,4 @@
-package com.sammidev.array;
-
-import java.util.Arrays;
+package com.sammidev.oop;
 
 public class App {
     public static void main(String[] args) {
