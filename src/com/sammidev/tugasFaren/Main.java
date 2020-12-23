@@ -8,19 +8,6 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        /* LOGIC APP
-         int n1 = 10;
-         int n2 = 15;
-         int h1 = (n1 + n2) * (n2 + n1);
-         int h2 = (n1 % 4) * n2;
-
-         boolean b1 = h1 >= h2;
-         boolean b2 = h2 >= h1;
-         boolean b3 = (h1 % 4) == (++h2 % 5);
-         boolean b4 = (b1 ^ b3) && (b2 || b3);
-         boolean b5 = b2 || (b3 && (b2 ^ b1));
-        */
-
         menggunakanScanner();
         menggunakanBufferedReader();
         menggunakanJoptionpane();
@@ -53,6 +40,7 @@ public class Main {
         int n2 =  Integer.parseInt(JOptionPane.showInputDialog("Masukkan n2 "));
         calculate(n1,n2);
     }
+
     static void calculate(int n1, int n2) {
         int h1 = (n1 + n2) * (n2 + n1);
         int h2 = (n1 % 4) * n2;
