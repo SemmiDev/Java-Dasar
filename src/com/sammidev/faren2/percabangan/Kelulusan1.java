@@ -4,8 +4,13 @@ import java.util.Scanner;
 
 public class Kelulusan1 {
     public static void main(String[] args) {
-        Scanner inp = new Scanner(System.in);
+        kelulusan();
+       
+    }
 
+    public static void kelulusan() {
+        Scanner inp = new Scanner(System.in);
+        
         System.out.print("Masukkan nama anda = ");
         String nama = inp.nextLine();
 
