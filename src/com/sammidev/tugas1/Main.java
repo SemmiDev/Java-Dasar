@@ -1,4 +1,4 @@
-//package com.sammidev.tugas1;
+package com.sammidev.tugas1;
 
 import javax.swing.*;
 import java.awt.event.KeyAdapter;
