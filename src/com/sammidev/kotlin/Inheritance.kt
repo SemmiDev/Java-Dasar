@@ -107,6 +107,13 @@ fun isis() {
     val a = lateinitdemo()
     a.initdung("sammidev")
     println(a.name)
+
+
+    val b = Sam()
+    b.fast("sammidev")
+    b.slow("sammidev")
+    b.concrete()
+
 }
 
 
@@ -141,3 +148,36 @@ class lateinitdemo {
         this.name = name
     }
 }
+
+
+
+
+
+
+
+interface Interaction {
+    fun concrete() {
+        println("concrete")
+    }
+
+    fun fast(name: String)
+    fun slow(name: String)
+}
+
+class Sam : Interaction {
+
+    override fun fast(name: String) {
+        println(name)
+    }
+
+    override fun slow(name: String) {
+        println(name)
+    }
+
+}
+
+
+
+
+
+
