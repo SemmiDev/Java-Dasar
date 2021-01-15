@@ -79,6 +79,11 @@ fun main() {
 
     isis()
 
+
+    println(product1)
+    println(product2)
+
+
 }
 
 
@@ -177,7 +182,6 @@ class Sam : Interaction {
 }
 
 
-
 interface A {
     fun move() {
         println("move a")
@@ -199,3 +203,8 @@ class AB : A,B {
 }
 
 
+
+
+data class Product(val name: String, val price: BigDecimal)
+val product1 = Product("mousepad", BigDecimal(20000))
+val product2 = product1.copy(price = BigDecimal(3000))
