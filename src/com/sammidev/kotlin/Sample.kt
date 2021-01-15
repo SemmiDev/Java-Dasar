@@ -1,5 +1,7 @@
 package com.sammidev.kotlin
 
+import java.time.LocalDate
+import java.util.*
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
@@ -59,6 +61,10 @@ class StudentRepositoryImpl : StudentRepository<Student, String> {
 
 }
 
+
+fun Student.upperTheNameAndAddUUIDAndYear(): String =
+    this.name.toUpperCase() + UUID.randomUUID().toString() + LocalDate.of(10,10,10).year.toString();
+
 interface StudentRepository<T, ID> {
     fun findall(): List<T>
     fun removebyname(name: ID) : Boolean
@@ -76,4 +82,21 @@ fun main() {
     assertNotNull(service.findall())
     assertTrue(service.removebyname("sammidev"))
     assertNotNull(service.findbyname("sammidev2"))
+
+    println(service.findbyname("sammidev2")?.upperTheNameAndAddUUIDAndYear()?.replace("-",""));
+
+    val employee = Employee("Sammidev","Sammidev")
+    println(employee.toString())
+
+}
+
+class Employee(
+        val name: String,
+        val email: String,
+        val phone: String? = null) {
+    constructor(name: String, email: String) : this(name,email, null)
+
+    override fun toString(): String {
+        return "${this.name} ${this.email} this.phone"
+    }
 }
