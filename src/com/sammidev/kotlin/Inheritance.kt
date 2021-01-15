@@ -84,6 +84,9 @@ fun main() {
     println(product2)
 
 
+    InheritFromSealed().plus(2,3)
+    InheritFromSealed().minus(2,3)
+    InheritFromSealed().multiply(2,3)
 }
 
 
@@ -208,3 +211,31 @@ class AB : A,B {
 data class Product(val name: String, val price: BigDecimal)
 val product1 = Product("mousepad", BigDecimal(20000))
 val product2 = product1.copy(price = BigDecimal(3000))
+
+
+
+
+sealed class Operation {
+    fun plus(a: Int,b:Int) { println(a+b)}
+    fun minus(a: Int,b:Int) { println(a-b)}
+    fun multiply(a: Int,b:Int) { println(a*b)}
+}
+
+class InheritFromSealed : Operation()
+
+
+sealed class Calculate(val name: String)
+class Penjumlahan : Calculate("Penjumlahan")
+class Pengurangan : Calculate("Pengurangan")
+class Perkalian : Calculate("Perkalian")
+
+
+fun operation(value1: Int, value2: Int, calculate: Calculate) : Int{
+    return when(calculate) {
+        is Penjumlahan -> value1 + value2
+        is Pengurangan -> value1 - value2
+        else -> 0
+    }
+}
+
+
