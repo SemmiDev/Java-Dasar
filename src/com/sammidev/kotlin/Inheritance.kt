@@ -19,13 +19,40 @@ class VicePresident(name: String,val salary: BigDecimal) : Person(name) {
     }
 }
 
+
+
+open class Siswa(val name: String) {
+    open fun hello() {
+        println("hello from siswa 1")
+    }
+}
+
+class Siswaa(name: String) : Siswa(name) {
+
+    override fun hello() {
+        println("hello  from siswa 2")
+    }
+    fun superr() {
+        super.hello()
+    }
+
+}
+
 fun main() {
+
+    val sammi = Siswaa("Sammidev")
+    sammi.hello()
+    sammi.superr()
+
+
 
     val manager: Person = Manager("sam")
     manager.fullname("sammidev")
 
-    val vicePresident = VicePresident("sam2", BigDecimal(10000))h
+    val vicePresident = VicePresident("sam2", BigDecimal(10000))
     vicePresident.fullname("sammidev2")
     vicePresident.show()
 
 }
+
+
