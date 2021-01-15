@@ -94,4 +94,33 @@ fun isis() {
         is Double -> println("this is a double")
     }
 
+    val name2: Any = true
+    println(name.hashCode() == name2.hashCode())
+
+
+
+    Sign("sammidev","Sammidev").login("Sammidev", "sammi")
+    Sign("sammidev","Sammidev").logout()
+}
+
+
+abstract class LoginFlow {
+    abstract val username : String
+    abstract val password : String
+
+    abstract fun login(username: String, password: String)
+    abstract fun logout()
+}
+
+class Sign(
+        override val username: String,
+        override val password: String) : LoginFlow() {
+
+    override fun login(username: String, password: String) {
+        println("login")
+    }
+
+    override fun logout() {
+        println("logout")
+    }
 }
