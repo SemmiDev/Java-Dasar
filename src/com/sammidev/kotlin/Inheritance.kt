@@ -178,6 +178,24 @@ class Sam : Interaction {
 
 
 
+interface A {
+    fun move() {
+        println("move a")
+    }
+}
 
+interface B {
+    fun move() {
+        println("move a")
+    }
+}
+
+class AB : A,B {
+
+    override fun move() {
+        super<A>.move()
+        super<B>.move()
+    }
+}
 
 
