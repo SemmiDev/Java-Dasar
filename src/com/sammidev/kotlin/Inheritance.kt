@@ -237,5 +237,3 @@ fun operation(value1: Int, value2: Int, calculate: Calculate) : Int{
         else -> 0
     }
 }
-
-
