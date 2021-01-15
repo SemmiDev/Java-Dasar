@@ -101,6 +101,12 @@ fun isis() {
 
     Sign("sammidev","Sammidev").login("Sammidev", "sammi")
     Sign("sammidev","Sammidev").logout()
+
+
+
+    val a = lateinitdemo()
+    a.initdung("sammidev")
+    println(a.name)
 }
 
 
@@ -122,5 +128,16 @@ class Sign(
 
     override fun logout() {
         println("logout")
+    }
+}
+
+
+
+
+class lateinitdemo {
+    lateinit var name: String
+
+    fun initdung(name: String) {
+        this.name = name
     }
 }
