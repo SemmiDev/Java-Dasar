@@ -61,7 +61,7 @@ class Sammidev : Mahasiswa {
 
 fun main() {
 
-    val sam = Sammidev(2,10)
+    /*val sam = Sammidev(2,10)
     sam.show()
 
 
@@ -75,7 +75,23 @@ fun main() {
     val vicePresident = VicePresident("sam2", BigDecimal(10000))
     vicePresident.fullname("sammidev2")
     vicePresident.show()
+*/
+
+    isis()
 
 }
 
 
+fun isis() {
+    val name : Any = true
+    println(name is String)
+    println(name !is String)
+
+    when(name) {
+        is String -> println("this is a string")
+        is Boolean -> println("this is a boolean")
+        is Int -> println("this is a int")
+        is Double -> println("this is a double")
+    }
+
+}
